@@ -4,4 +4,4 @@
 2.使用华为MATE 20,P20 Pro系列
 
 采样数据:  
-包括../HUAWEI_AR/AR目录下.data文件和二维初始化数据xml文件。
+采样保存2个文件。在../HUAWEI_AR/AR目录下.data文件和二维地图初始化数据xml文件。
