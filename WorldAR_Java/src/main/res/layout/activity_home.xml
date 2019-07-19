@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/home_bg"
+    android:orientation="vertical">
+    <!--地图显示-->
+    <LinearLayout
+        android:id="@+id/ll_map"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:background="@mipmap/qc2_bg"
+        android:orientation="horizontal"
+        android:paddingRight="15dp">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:src="@mipmap/loc" />
+
+        <com.huawei.hiardemo.area.view.MarqueeTextView
+            android:id="@+id/marque"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="5dp"
+            android:text="正在加载..."
+            android:textColor="@color/tool_bg"
+            android:textSize="17sp"
+            app:scroll_first_delay="3000"
+            app:scroll_interval="3000"
+            app:scroll_mode="mode_forever" />
+    </LinearLayout>
+
+  <!--  <com.huawei.hiardemo.java.view.CircularFillableLoaders
+        android:id="@+id/circularFillableLoaders"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:visibility="gone"
+        app:cfl_border_width="5dp"
+        app:cfl_progress="10"
+        app:cfl_wave_color="#37B629" />-->
+    <!--功能选择-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="40dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <!--售前-->
+        <ImageView
+            android:id="@+id/before"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="30dp"
+            android:layout_weight="1"
+            android:src="@mipmap/before_bg" />
+        <!--售后-->
+        <ImageView
+            android:id="@+id/after"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="30dp"
+            android:layout_weight="1"
+            android:src="@mipmap/after_bg" />
+        <!--SVA定位-->
+        <ImageView
+            android:id="@+id/loc"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="30dp"
+            android:layout_weight="1"
+            android:src="@mipmap/sva_bg" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/settings"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"
+        android:src="@mipmap/settings" />
+
+</LinearLayout>

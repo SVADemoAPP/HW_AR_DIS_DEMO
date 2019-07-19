@@ -1,0 +1,9 @@
+<resources>
+    <dimen name="action_button_size">72dp</dimen>  <!--中心点的大小-->
+    <dimen name="action_button_content_margin">16dp</dimen> <!--中心图标距离圆心距离-->
+    <dimen name="action_button_margin">20dp</dimen> <!--中心点距离原点距离-->
+    <dimen name="action_menu_radius">80dp</dimen> <!--功能键和中心点之间的距离-->
+
+    <dimen name="sub_action_button_size">40dp</dimen>  <!--功能键大小-->
+    <dimen name="sub_action_button_content_margin">10dp</dimen>  <!--功能键距离边缘距离-->
+</resources>

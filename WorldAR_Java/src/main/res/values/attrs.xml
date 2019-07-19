@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PieView">
+        <attr name="dividerColor" format="color" />
+        <attr name="defaultColor" format="color" />
+        <attr name="pressedColor" format="color" />
+        <attr name="gapWidth" format="dimension" />
+        <attr name="arrowLocation" format="dimension" />
+        <attr name="arrowBranchLength" format="dimension" />
+    </declare-styleable>
+    <!--跑马灯-->
+    <declare-styleable name="MarqueeTextView">
+        <attr name="scroll_interval" format="integer" />
+        <attr name="scroll_first_delay" format="integer" />
+        <attr name="scroll_mode">
+            <enum name="mode_forever" value="100" />
+            <enum name="mode_once" value="101" />
+        </attr>
+    </declare-styleable>
+    <!--百分比球-->
+    <declare-styleable name="CircularFillableLoaders">
+        <attr name="cfl_progress" format="integer" />
+        <attr name="cfl_border" format="boolean" />
+        <attr name="cfl_border_width" format="dimension" />
+        <attr name="cfl_wave_color" format="color" />
+        <attr name="cfl_wave_amplitude" format="float" />
+    </declare-styleable>
+</resources>
+
