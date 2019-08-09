@@ -129,6 +129,7 @@ public class PrruMapFragment extends Fragment {
                         break;
                     case RESET_ITEM:  //重置
 //                        resetPointF();
+                        ((FloorMapActivity) getActivity()).addARPose();
                         break;
                     default:
                         break;
@@ -450,7 +451,7 @@ public class PrruMapFragment extends Fragment {
     private void initOtherMap() {
         InputStream is = null;
         try {
-            is = getActivity().getAssets().open("U5.png");
+            is = getActivity().getAssets().open("floor_2.png");
             BitmapDrawable bd = (BitmapDrawable) Drawable.createFromStream(is, null);
             Constant.mSelectBitmap = bd.getBitmap();
             is.close();

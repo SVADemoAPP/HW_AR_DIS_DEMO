@@ -29,8 +29,10 @@ import com.huawei.hiar.ARConfigBase;
 import com.huawei.hiar.AREnginesApk;
 import com.huawei.hiar.AREnginesSelector;
 import com.huawei.hiar.ARFrame;
+import com.huawei.hiar.ARHitResult;
 import com.huawei.hiar.ARLightEstimate;
 import com.huawei.hiar.ARPlane;
+import com.huawei.hiar.ARPoint;
 import com.huawei.hiar.ARPointCloud;
 import com.huawei.hiar.ARPose;
 import com.huawei.hiar.ARSession;
@@ -374,7 +376,7 @@ public class ARFragment extends Fragment implements GLSurfaceView.Renderer {
     }
 
     @Override
-    public void onSurfaceChanged(GL10 unused, int width, int height) {
+    public void onSurfaceChanged(GL10 gl, int width, int height) {
         mWidth = width;
         mHeight = height;
         GLES20.glViewport(0, 0, width, height);
@@ -412,6 +414,7 @@ public class ARFragment extends Fragment implements GLSurfaceView.Renderer {
                     if (file.exists()) {
 //                        loadSdCardMap(mPath);
                         mSession.loadSharedData(mByte);
+                        setARAnchors(new  File(Constant.AR_PATH + File.separator + "ar.data"));
                     }
                 }
             }
@@ -425,9 +428,9 @@ public class ARFragment extends Fragment implements GLSurfaceView.Renderer {
                     mGetArPoseHandler.post(mGetArPosRunnable);
                 }
             }
-//            handleTap(frame, camera);
-
             mBackgroundRenderer.draw(mFrame);
+
+            handleTap(mFrame, camera);
 
             if (camera.getTrackingState() == ARTrackable.TrackingState.PAUSED) {
                 return;
@@ -632,8 +635,64 @@ public class ARFragment extends Fragment implements GLSurfaceView.Renderer {
             @Override
             public void run() {
                 ARUtils.saveARSeesionPlane(mSession, selectPoint.x, selectPoint.y, angle);
+                Collection<ARAnchor> arAnchors = getARAnchors();
+                if (arAnchors.size() > 0) {
+                    ShareMapHelper.svaAnchorToFile(Constant.AR_PATH + File.separator + "ar.data", arAnchors);
+                }
+
             }
         }).start();
+    }
+
+    public void setAnchor() {
+        mAnchors.add(mSession.createAnchor(mArPose));
+    }
+
+    private void handleTap(ARFrame frame, ARCamera camera) {
+        MotionEvent tap = mQueuedSingleTaps.poll();
+
+        if (tap != null && camera.getTrackingState() == ARTrackable.TrackingState.TRACKING) {
+            ARHitResult hitResult = null;
+            ARTrackable trackable = null;
+            boolean hasHitFlag = false;
+
+            List<ARHitResult> hitTestResult = frame.hitTest(tap);
+            for (int i = 0; i < hitTestResult.size(); i++) {
+                // Check if any plane was hit, and if it was hit inside the plane polygon
+                ARHitResult hitResultTemp = hitTestResult.get(i);
+                trackable = hitResultTemp.getTrackable();
+                if ((trackable instanceof ARPlane
+                        && ((ARPlane) trackable).isPoseInPolygon(hitResultTemp.getHitPose())
+                        && (PlaneRenderer.calculateDistanceToPlane(hitResultTemp.getHitPose(), camera.getPose()) > 0))
+                        || (trackable instanceof ARPoint
+                        && ((ARPoint) trackable).getOrientationMode() == ARPoint.OrientationMode.ESTIMATED_SURFACE_NORMAL)) {
+                    hasHitFlag = true;
+                    hitResult = hitResultTemp;
+                }
+
+                if (trackable instanceof ARPlane) {
+                    break;
+                }
+            }
+
+            //if hit both Plane and Point,take Plane at the first priority.
+            if (hasHitFlag != true) {
+                return;
+            }
+
+            // Hits are sorted by depth. Consider only closest hit on a plane or oriented point.
+            // Cap the number of objects created. This avoids overloading both the
+            // rendering system and ARCore.
+/*            if (mARAnchors.size() >= UtilsCommon.MAX_TRACKING_ANCHOR_NUM) {
+                mARAnchors.get(0).anchor.detach();
+                mARAnchors.remove(0);
+            }*/
+
+            // Adding an Anchor tells ARCore that it should track this position in
+            // space. This anchor is created on the Plane to place the 3D model
+            // in the correct position relative both to the world and to the plane.
+            mAnchors.add(hitResult.createAnchor());
+        }
     }
 
 
