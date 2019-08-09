@@ -160,7 +160,7 @@ public class SelectActivity extends BaseActivity implements View.OnClickListener
     private void initOtherMap() {
         InputStream is = null;
         try {
-            is = getAssets().open("U5.png");
+            is = getAssets().open("U1.png");
             BitmapDrawable bd = (BitmapDrawable) Drawable.createFromStream(is, null);
             Constant.mSelectBitmap = bd.getBitmap();
             is.close();

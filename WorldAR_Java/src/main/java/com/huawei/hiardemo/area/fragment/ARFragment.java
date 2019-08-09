@@ -367,7 +367,7 @@ public class ARFragment extends Fragment implements GLSurfaceView.Renderer {
             Log.d(TAG, "Failed to read plane texture");
         }
         try {
-            mPlaneRenderer.createOnGlThread(/*context=*/getActivity(), "trigrid.png");
+            mPlaneRenderer.createOnGlThread(/*context=*/getActivity(), "U5.png");
         } catch (IOException e) {
             Log.e(TAG, "Failed to read plane texture");
         }
@@ -385,17 +385,6 @@ public class ARFragment extends Fragment implements GLSurfaceView.Renderer {
 
     @Override
     public void onDrawFrame(final GL10 unused) {
-//        showFpsTextView(String.valueOf(FPSCalculate()));
-        //ar 每隔一定时间保存一次图片
-//        if (judge()) {
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    Bitmap cBitmap = BitmapUtil.createBitmapFromGLSurface(0, 0, mWidth, mHeight, unused);
-//                    saveBitmap(cBitmap);
-//                }
-//            }).start();
-//        }
         setView(azimuthAngle);//设置角度
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
@@ -467,16 +456,23 @@ public class ARFragment extends Fragment implements GLSurfaceView.Renderer {
             mPlaneRenderer.drawPlanes(mSession.getAllTrackables(ARPlane.class), camera.getDisplayOrientedPose(), projmtx);
 
             Iterator<ARAnchor> ite = mAnchors.iterator();
+            StringBuffer stringBuffer = new StringBuffer();
             while (ite.hasNext()) {
                 ARAnchor coloredAnchor = ite.next();
+                stringBuffer.append("--");
+                stringBuffer.append(coloredAnchor.getTrackingState());
+                stringBuffer.append("--");
+                stringBuffer.append((coloredAnchor.getTrackingState() == ARTrackable.TrackingState.STOPPED));
+                stringBuffer.append("--");
                 if (coloredAnchor.getTrackingState() == ARTrackable.TrackingState.STOPPED) {
                     ite.remove();
-                } else if (coloredAnchor.getTrackingState() == ARTrackable.TrackingState.TRACKING) {
+                } else{
                     coloredAnchor.getPose().toMatrix(mAnchorMatrix, 0);
                     mVirtualObject.updateModelMatrix(mAnchorMatrix, mScaleFactor);
                     mVirtualObject.draw(viewmtx, projmtx, lightIntensity, DEFAULT_COLOR);
                 }
             }
+            LogUtils.d("TrackingState",stringBuffer.toString());
 
         } catch (Throwable t) {
             Log.e(TAG, "Exception on the OpenGL thread", t);
@@ -722,6 +718,28 @@ public class ARFragment extends Fragment implements GLSurfaceView.Renderer {
                 magneticFieldValues);
         SensorManager.getOrientation(R, values);
         azimuthAngle = (float) Math.toDegrees(values[0]);
+    }
+
+    public void judgeARAnchor(){
+        if(hasplat){
+            LogUtils.d("分割线","------------------");
+            StringBuffer stringBuffer = new StringBuffer();
+            for(ARAnchor arAnchor : mAnchors){
+                stringBuffer.append("x:" + arAnchor.getPose().tx());
+                stringBuffer.append("--" );
+                stringBuffer.append("y:" + arAnchor.getPose().tz());
+                stringBuffer.append("--" );
+                stringBuffer.append("z:" + arAnchor.getPose().ty());
+                stringBuffer.append("\\r\\n");
+                double d =  Math.sqrt(Math.pow(mArPose.tx() - arAnchor.getPose().tx(), 2) + Math.pow(mArPose.tz() - arAnchor.getPose().tz(), 2));
+                LogUtils.d("distance",d+"");
+                if(d < 0.2){
+                    arAnchor.detach();
+                }
+                LogUtils.d("state",arAnchor.getTrackingState().toString());
+            }
+            LogUtils.d("坐标",stringBuffer.toString());
+        }
     }
 
 

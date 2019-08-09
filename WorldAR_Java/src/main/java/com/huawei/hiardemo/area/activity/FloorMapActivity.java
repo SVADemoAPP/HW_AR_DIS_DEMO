@@ -60,6 +60,9 @@ public class FloorMapActivity extends BaseActivity implements View.OnClickListen
                 if (mPrruMapFragment != null) {
                     mPrruMapFragment.timerDraw(mMapX, mMapY);
                 }
+                /*if(mArFragment != null){
+                    mArFragment.judgeARAnchor();
+                }*/
             }
             mTimerHandler.postDelayed(this, TIMER_TIME);
         }
@@ -328,4 +331,7 @@ public class FloorMapActivity extends BaseActivity implements View.OnClickListen
         mArFragment.saveARPlanes();
     }
 
+    public void addARPose() {
+        mArFragment.setAnchor();
+    }
 }

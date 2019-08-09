@@ -451,7 +451,7 @@ public class PrruMapFragment extends Fragment {
     private void initOtherMap() {
         InputStream is = null;
         try {
-            is = getActivity().getAssets().open("floor_2.png");
+            is = getActivity().getAssets().open("U1.png");
             BitmapDrawable bd = (BitmapDrawable) Drawable.createFromStream(is, null);
             Constant.mSelectBitmap = bd.getBitmap();
             is.close();

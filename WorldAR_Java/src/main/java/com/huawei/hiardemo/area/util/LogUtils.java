@@ -121,7 +121,7 @@ public class LogUtils {
         if (!pathFile.exists()) {
             pathFile.mkdirs();
         }
-        File targetFile = new File(pathFile, "Log_" + format+".txt");
+        File targetFile = new File(pathFile, "Log_" + name + format+".txt");
         FileOutputStream fileOutputStream = null;
         try {
             if (!targetFile.exists()) {
